@@ -84,8 +84,10 @@
                 subject: subject
             };
 
+            const baseUrl = 'http://localhost:3000';
+
             try {
-                const response = await fetch('http://localhost:3000/queue/jobs', {
+                const response = await fetch(`${baseUrl}/queue/jobs`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

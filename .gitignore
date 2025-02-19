@@ -7,9 +7,9 @@ venv/
 env/
 ENV/
 *.env
-node_modules/
+/node_modules/
 
-# IDEs
+# IDE
 .idea/
 .vscode/
 
