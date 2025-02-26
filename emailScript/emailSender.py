@@ -67,7 +67,8 @@ def process_jobs():
         job = client.blpop('email_queue', timeout=0)  # Wait for a job
         if job:
             data = job[1]  # Get the job data
-            email_data = eval(data)  # Convert string to dictionary
+            email_data = eval(data) 
+            print(email_data)# Convert string to dictionary
             email = email_data['email']
             subject = email_data['subject']
             send_email(email, subject)
