@@ -32,6 +32,7 @@ async function putJob(data, queueName) {
 // API endpoint to add a job to the queue
 app.post('/queue/jobs', async (req, res) => {
     const { email, subject } = req.body;
+    console.log(email, subject, "queue testing");
 
     try {
         await putJob({ email, subject }, 'email_queue');
