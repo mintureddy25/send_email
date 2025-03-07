@@ -21,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Create a Redis client using the environment variable
 const client = createClient({
-    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}` // Use the REDIS_URL from .env
+    url: process.env.REDIS_URI
+    //url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}` // Use the REDIS_URL from .env
 });
 
 // Connect to Redis
