@@ -12,6 +12,8 @@ load_dotenv()
 # Configuration from environment variables
 REDIS_HOST = os.getenv('REDIS_HOST')
 REDIS_PORT = int(os.getenv('REDIS_PORT'))
+REDIS_USERNAME = os.getenv('REDIS_USERNAME')
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 EMAIL_USER = os.getenv('EMAIL_USER')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_SMTP_SERVER = os.getenv('EMAIL_SMTP_SERVER')
@@ -19,7 +21,8 @@ EMAIL_SMTP_PORT = int(os.getenv('EMAIL_SMTP_PORT'))
 PDF_FILE_PATH = './SaiTejaReddyResume.pdf'
 
 # Create Redis client
-client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True, username=REDIS_USERNAME,
+    password=REDIS_PASSWORD)
 
 # Function to send an email
 def send_email(email, subject):
