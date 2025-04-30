@@ -41,20 +41,21 @@ def send_email(email, subject):
     # Email body
     body = (
         "Hi,\n\n"
-        f"I found the {subject} role on LinkedIn and had to reach out.\n\n"
-        "I'm not someone who just writes code — for me, coding is a lifestyle. It's how I think, solve, and live.\n\n"
+        f"I found the {subject} role on LinkedIn and had to reach out.\n"
+        "I'm not someone who just writes code — for me, coding is a lifestyle. It's how I think, solve, and live.\n"
         "Quick example: I needed to send recurring messages. Most copy-paste. I built a cron job. That mindset — "
-        "finding smart, scalable solutions — is what I bring to every team.\n\n"
+        "finding smart, scalable solutions — is what I bring to every team.\n"
         "Here’s some of what I’ve built recently:\n"
         "🔧 Email Sender Tool (Node.js, Redis, React)\n"
         "✈️ Flight Booking App → https://flights.saiteja.online\n"
         "🏏 Cricket Tournament Platform → https://beta.testingproject.space (Login: saiteja@gmail.com / 123456789)\n\n"
-        "Even this email was sent using my own tool that automates sending personalized emails to recruiters.\n\n"
-        "I thrive on solving real problems and love working across stacks. I learn fast — give me 15–20 days and I’m productive in any tech.\n\n"
+        "Even this email was sent using my own tool that automates sending personalized emails to recruiters.\n"
+        "I thrive on solving real problems and love working across stacks. I learn fast — give me 15–20 days and I’m productive in any tech.\n"
         "Portfolio → https://saiteja.online\n\n"
         "If this sounds interesting, I’d love to show you what I’ve built. Let’s connect?\n\n"
         "Best,\n"
-        "Sai Teja Reddy"
+        "Sai Teja Reddy\n"
+        "P.S. I have attached my resume for your reference."
     )
 
     msg.attach(MIMEText(body, "plain"))
