@@ -3,55 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Form</title>
+    <title>Email Sender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            padding: 20px;
         }
+
         .form-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px; /* Set a fixed width for better centering */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 48px 40px;
+            width: 420px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
+
         .form-container h2 {
-            margin-bottom: 20px;
-            text-align: center; /* Center the heading */
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
         }
+
+        .form-container .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            text-align: left; /* Align labels to the left */
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
+
         .form-group input {
             width: 100%;
-            padding: 10px; /* Reduced padding for height */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Ensures padding is included in width */
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-family: "Inter", sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
         }
-        .submit-btn {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group input:focus {
+            border-color: #6c63ff;
+            background: rgba(108, 99, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e1b3a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            margin-top: 4px;
+            overflow: hidden;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestions.active { display: block; }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
             cursor: pointer;
-            font-size: 16px;
-            width: 100%; /* Full width button */
+            transition: all 0.2s ease;
         }
+
+        .suggestion-item:hover, .suggestion-item.highlighted {
+            background: rgba(108, 99, 255, 0.2);
+            color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #6c63ff, #4834d4);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
         .submit-btn:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .submit-btn:active { transform: translateY(0); }
+
+        /* Toast notification */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: "Inter", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease, fadeOut 0.4s ease 3.6s forwards;
+            min-width: 320px;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #00b894, #00a381);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .toast-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(120%); opacity: 0; }
         }
     </style>
 </head>
@@ -59,50 +190,141 @@
 
     <div class="form-container">
         <h2>Send Email</h2>
+        <p class="subtitle">Reach out to recruiters with one click</p>
         <form id="emailForm">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="recruiter@company.com" required>
             </div>
             <div class="form-group">
-                <label for="subject">Subject (optional):</label>
-                <input type="text" id="subject">
+                <label for="subject">Role (optional)</label>
+                <input type="text" id="subject" placeholder="Type or select a role..." autocomplete="off">
+                <div class="suggestions" id="suggestions"></div>
             </div>
-            <button type="submit" class="submit-btn">Submit</button>
+            <button type="submit" class="submit-btn">Send Email</button>
         </form>
     </div>
 
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
-        document.getElementById('emailForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent form submission
+        const roles = [
+            "Full Stack Developer",
+            "Frontend Developer",
+            "Backend Developer",
+            "Software Engineer",
+            "SDE 1",
+            "SDE 2",
+            "SDE 3",
+            "Software Developer",
+            "React Developer",
+            "Node.js Developer",
+            "Python Developer",
+            "Java Developer",
+            "DevOps Engineer",
+            "Cloud Engineer",
+            "Data Engineer",
+            "UI/UX Developer",
+            "MERN Stack Developer",
+            "Web Developer"
+        ];
 
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value || 'Full Stack Developer';
+        const subjectInput = document.getElementById("subject");
+        const suggestionsBox = document.getElementById("suggestions");
+        let highlightedIndex = -1;
 
-            const data = {
-                email: email,
-                subject: subject
-            };
+        function renderSuggestions(filter) {
+            const filtered = roles.filter(function(r) {
+                return r.toLowerCase().includes(filter.toLowerCase());
+            });
+            if (filtered.length === 0 || filter === "") {
+                suggestionsBox.classList.remove("active");
+                return;
+            }
+            suggestionsBox.innerHTML = filtered.map(function(r, i) {
+                return '<div class="suggestion-item" data-index="' + i + '">' + r + '</div>';
+            }).join("");
+            suggestionsBox.classList.add("active");
+            highlightedIndex = -1;
 
-            const baseUrl = 'http://localhost:3000';
+            suggestionsBox.querySelectorAll(".suggestion-item").forEach(function(item) {
+                item.addEventListener("click", function() {
+                    subjectInput.value = this.textContent;
+                    suggestionsBox.classList.remove("active");
+                });
+            });
+        }
+
+        subjectInput.addEventListener("input", function() {
+            renderSuggestions(this.value);
+        });
+
+        subjectInput.addEventListener("focus", function() {
+            if (this.value) renderSuggestions(this.value);
+        });
+
+        subjectInput.addEventListener("keydown", function(e) {
+            var items = suggestionsBox.querySelectorAll(".suggestion-item");
+            if (!items.length) return;
+
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+                items.forEach(function(i) { i.classList.remove("highlighted"); });
+                items[highlightedIndex].classList.add("highlighted");
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                items.forEach(function(i) { i.classList.remove("highlighted"); });
+                items[highlightedIndex].classList.add("highlighted");
+            } else if (e.key === "Enter" && highlightedIndex >= 0) {
+                e.preventDefault();
+                subjectInput.value = items[highlightedIndex].textContent;
+                suggestionsBox.classList.remove("active");
+            }
+        });
+
+        document.addEventListener("click", function(e) {
+            if (!e.target.closest(".form-group")) {
+                suggestionsBox.classList.remove("active");
+            }
+        });
+
+        function showToast(message, type) {
+            var container = document.getElementById("toastContainer");
+            var toast = document.createElement("div");
+            toast.className = "toast " + type;
+            var icon = type === "success" ? "&#10004;" : "&#10006;";
+            toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span>' + message + '</span>';
+            container.appendChild(toast);
+            setTimeout(function() { toast.remove(); }, 4000);
+        }
+
+        document.getElementById("emailForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            var email = document.getElementById("email").value;
+            var subject = document.getElementById("subject").value || "Full Stack Developer";
+
+            var data = { email: email, subject: subject };
+            var baseUrl = "";
 
             try {
-                const response = await fetch(`${baseUrl}/queue/jobs`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                var response = await fetch(baseUrl + "/queue/jobs", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data)
                 });
 
                 if (response.ok) {
-                    alert('Data submitted successfully!');
+                    showToast("Email submitted! You will receive an email shortly.", "success");
+                    document.getElementById("emailForm").reset();
                 } else {
-                    alert('Error submitting data.');
+                    showToast("Error submitting email. Please try again.", "error");
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('There was a problem with your submission.');
+                console.error("Error:", error);
+                showToast("Something went wrong. Please try again.", "error");
             }
         });
     </script>
