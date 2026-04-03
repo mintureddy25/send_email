@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 import os
+import json
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -91,7 +92,7 @@ def process_jobs():
         job = client.blpop("email_queue", timeout=0)  # Wait for a job
         if job:
             data = job[1]  # Get the job data
-            email_data = eval(data)  # Convert string to dictionary
+            email_data = json.loads(data)  # Convert JSON string to dictionary
             print(email_data)
             email = email_data["email"]
             subject = email_data["subject"]
