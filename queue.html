@@ -201,6 +201,10 @@
                 <input type="text" id="subject" placeholder="Type or select a role..." autocomplete="off">
                 <div class="suggestions" id="suggestions"></div>
             </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="includeMetageeks" style="width: auto; accent-color: #6c63ff;">
+                <label for="includeMetageeks" style="margin-bottom: 0; text-transform: none; font-size: 14px;">Include Metageeks experience in resume</label>
+            </div>
             <button type="submit" class="submit-btn">Send Email</button>
         </form>
     </div>
@@ -305,8 +309,9 @@
 
             var email = document.getElementById("email").value;
             var subject = document.getElementById("subject").value || "Full Stack Developer";
+            var includeMetageeks = document.getElementById("includeMetageeks").checked;
 
-            var data = { email: email, subject: subject };
+            var data = { email: email, subject: subject, includeMetageeks: includeMetageeks };
             var baseUrl = "";
 
             try {

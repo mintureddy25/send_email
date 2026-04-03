@@ -18,7 +18,8 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 EMAIL_SMTP_SERVER = os.getenv("EMAIL_SMTP_SERVER")
 EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT"))
-PDF_FILE_PATH = "./SaiTejaReddyResume.pdf"
+PDF_WITH_METAGEEKS = "./SaiTejaReddyResume.pdf"
+PDF_WITHOUT_METAGEEKS = "./SaiTeja_Reddy_Resume.pdf"
 
 # Create Redis client
 client = redis.StrictRedis(
@@ -31,7 +32,10 @@ client = redis.StrictRedis(
 
 
 # Function to send an email
-def send_email(email, subject):
+def send_email(email, subject, include_metageeks=False):
+    # Select resume based on metageeks flag
+    pdf_file_path = PDF_WITH_METAGEEKS if include_metageeks else PDF_WITHOUT_METAGEEKS
+
     # Set up the email
     msg = MIMEMultipart()
     msg["From"] = EMAIL_USER
@@ -42,7 +46,7 @@ def send_email(email, subject):
     body = (
         "Hi,\n\n"
         f"I found the {subject} role on LinkedIn and had to reach out.\n"
-        "I'm not someone who just writes code — for me, coding is a lifestyle. It's how I think, solve, and live.\n"
+        "I’m not someone who just writes code — for me, coding is a lifestyle. It’s how I think, solve, and live.\n"
         "Quick example: I needed to send recurring messages. Most copy-paste. I built a cron job. That mindset — "
         "finding smart, scalable solutions — is what I bring to every team.\n"
         "Here’s some of what I’ve built recently:\n"
@@ -61,16 +65,16 @@ def send_email(email, subject):
     msg.attach(MIMEText(body, "plain"))
 
     # Attach PDF
-    if os.path.exists(PDF_FILE_PATH):
-        with open(PDF_FILE_PATH, "rb") as pdf_file:
+    if os.path.exists(pdf_file_path):
+        with open(pdf_file_path, "rb") as pdf_file:
             pdf_attachment = MIMEApplication(pdf_file.read(), _subtype="pdf")
             pdf_attachment.add_header(
                 "Content-Disposition",
-                f'attachment; filename="{os.path.basename(PDF_FILE_PATH)}"',
+                f'attachment; filename="{os.path.basename(pdf_file_path)}"',
             )
             msg.attach(pdf_attachment)
     else:
-        print(f"Error: The file {PDF_FILE_PATH} does not exist.")
+        print(f"Error: The file {pdf_file_path} does not exist.")
 
     # Send the email
     with smtplib.SMTP(EMAIL_SMTP_SERVER, EMAIL_SMTP_PORT) as server:
@@ -91,7 +95,8 @@ def process_jobs():
             print(email_data)
             email = email_data["email"]
             subject = email_data["subject"]
-            send_email(email, subject)
+            include_metageeks = email_data.get("includeMetageeks", False)
+            send_email(email, subject, include_metageeks)
 
 
 if __name__ == "__main__":
