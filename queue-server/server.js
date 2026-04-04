@@ -41,11 +41,11 @@ async function putJob(data, queueName) {
 
 // API endpoint to add a job to the queue
 app.post('/queue/jobs', async (req, res) => {
-    const { email, subject, includeMetageeks } = req.body;
-    console.log(email, subject, includeMetageeks, "queue testing");
+    const { email, subject, includeMetageeks, useJavaResume } = req.body;
+    console.log(email, subject, includeMetageeks, useJavaResume, "queue testing");
 
     try {
-        await putJob({ email, subject, includeMetageeks: !!includeMetageeks }, 'email_queue');
+        await putJob({ email, subject, includeMetageeks: !!includeMetageeks, useJavaResume: !!useJavaResume }, 'email_queue');
         res.status(201).json({ message: 'Job added to queue' });
     } catch (error) {
         console.error('Caught error:', error);

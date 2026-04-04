@@ -205,6 +205,10 @@
                 <input type="checkbox" id="includeMetageeks" style="width: auto; accent-color: #6c63ff;">
                 <label for="includeMetageeks" style="margin-bottom: 0; text-transform: none; font-size: 14px;">Include Metageeks experience in resume</label>
             </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="useJavaResume" style="width: auto; accent-color: #6c63ff;">
+                <label for="useJavaResume" style="margin-bottom: 0; text-transform: none; font-size: 14px;">Send Java tech stack resume</label>
+            </div>
             <button type="submit" class="submit-btn">Send Email</button>
         </form>
     </div>
@@ -310,8 +314,9 @@
             var email = document.getElementById("email").value;
             var subject = document.getElementById("subject").value || "Full Stack Developer";
             var includeMetageeks = document.getElementById("includeMetageeks").checked;
+            var useJavaResume = document.getElementById("useJavaResume").checked;
 
-            var data = { email: email, subject: subject, includeMetageeks: includeMetageeks };
+            var data = { email: email, subject: subject, includeMetageeks: includeMetageeks, useJavaResume: useJavaResume };
             var baseUrl = "";
 
             try {

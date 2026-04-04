@@ -21,6 +21,7 @@ EMAIL_SMTP_SERVER = os.getenv("EMAIL_SMTP_SERVER")
 EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT"))
 PDF_WITH_METAGEEKS = "./SaiTejaReddyResume.pdf"
 PDF_WITHOUT_METAGEEKS = "./SaiTeja_Reddy_Resume.pdf"
+PDF_JAVA_RESUME = "./Sai_Teja_Reddy_Resume .pdf"
 
 # Create Redis client
 client = redis.StrictRedis(
@@ -33,9 +34,14 @@ client = redis.StrictRedis(
 
 
 # Function to send an email
-def send_email(email, subject, include_metageeks=False):
-    # Select resume based on metageeks flag
-    pdf_file_path = PDF_WITH_METAGEEKS if include_metageeks else PDF_WITHOUT_METAGEEKS
+def send_email(email, subject, include_metageeks=False, use_java_resume=False):
+    # Select resume based on flags
+    if use_java_resume:
+        pdf_file_path = PDF_JAVA_RESUME
+    elif include_metageeks:
+        pdf_file_path = PDF_WITH_METAGEEKS
+    else:
+        pdf_file_path = PDF_WITHOUT_METAGEEKS
 
     # Set up the email
     msg = MIMEMultipart()
@@ -97,7 +103,8 @@ def process_jobs():
             email = email_data["email"]
             subject = email_data["subject"]
             include_metageeks = email_data.get("includeMetageeks", False)
-            send_email(email, subject, include_metageeks)
+            use_java_resume = email_data.get("useJavaResume", False)
+            send_email(email, subject, include_metageeks, use_java_resume)
 
 
 if __name__ == "__main__":
