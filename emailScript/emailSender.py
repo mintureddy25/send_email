@@ -66,7 +66,7 @@ def send_email(email, subject, include_metageeks=False, use_java_resume=False):
         "🎮 **TicTacToe Multiplayer** — WebSocket PvP, built in a weekend → https://tictactoe.saitejareddy.online\n"
         "🤖 **Auto Email Sender** — The bot that just hit your inbox. Open source → https://github.com/mintureddy25/auto_email_sender\n"
         "🌐 **Portfolio** → https://saitejareddy.online\n\n"
-        "Stack: React · Next · Node · NestJS · PostgreSQL · Mongo · Redis · RabbitMQ · AWS · Docker · Python. Frameworks are furniture — what I bring is the instinct to **ship, break, fix, ship again**. ⚡\n\n"
+        "Tech stack? Whatever you're using. I don't marry frameworks — I ship with them, then move on. ⚡\n\n"
         "Give me *any* role where someone owns features idea → prod, and I'll embarrass devs with 2x my XP. Onboard in days. Ship in weeks. 🚀\n\n"
         "If this made you smirk, hit reply. Worst case: you close the tab. Best case: you find your next builder. 🙌\n\n"
         "**Sai Teja Reddy**\n"
