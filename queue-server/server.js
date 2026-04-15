@@ -2,7 +2,7 @@ const express = require('express');
 const { createClient } = require('redis');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config({ path: '../.env' }); 
+require('dotenv').config({ path: '../.env' });
 
 
 const app = express();

@@ -19,6 +19,7 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 EMAIL_SMTP_SERVER = os.getenv("EMAIL_SMTP_SERVER")
 EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT"))
+PDF_DEFAULT = "./saitejareddyresume.pdf"
 PDF_WITH_METAGEEKS = "./SaiTejaReddyResume.pdf"
 PDF_WITHOUT_METAGEEKS = "./SaiTeja_Reddy_Resume.pdf"
 PDF_JAVA_RESUME = "./Sai_Teja_Reddy_Resume .pdf"
@@ -35,13 +36,13 @@ client = redis.StrictRedis(
 
 # Function to send an email
 def send_email(email, subject, include_metageeks=False, use_java_resume=False):
-    # Select resume based on flags
+    # Select resume based on flags (default: saitejareddyresume.pdf)
     if use_java_resume:
         pdf_file_path = PDF_JAVA_RESUME
     elif include_metageeks:
         pdf_file_path = PDF_WITH_METAGEEKS
     else:
-        pdf_file_path = PDF_WITHOUT_METAGEEKS
+        pdf_file_path = PDF_DEFAULT
 
     # Set up the email
     msg = MIMEMultipart()
@@ -52,21 +53,26 @@ def send_email(email, subject, include_metageeks=False, use_java_resume=False):
     # Email body
     body = (
         "Hi,\n\n"
-        f"I found the {subject} role on LinkedIn and had to reach out.\n"
-        "I’m not someone who just writes code — for me, coding is a lifestyle. It’s how I think, solve, and live.\n"
-        "Quick example: I needed to send recurring messages. Most copy-paste. I built a cron job. That mindset — "
-        "finding smart, scalable solutions — is what I bring to every team.\n"
-        "Here’s some of what I’ve built recently:\n"
-        "🔧 Email Sender Tool (Node.js, Redis, React)\n"
-        "✈️ Flight Booking App\n"
-        "🏏 Cricket Tournament Platform\n\n"
-        "Even this email was sent using my own tool that automates sending personalized emails to recruiters.\n"
-        "I thrive on solving real problems and love working across stacks. I learn fast — give me 15–20 days and I’m productive in any tech.\n"
-        "Portfolio → https://saitejareddy.online\n\n"
-        "If this sounds interesting, I’d love to show you what I’ve built. Let’s connect?\n\n"
-        "Best,\n"
-        "Sai Teja Reddy\n"
-        "P.S. I have attached my resume for your reference."
+        f"I came across the {subject} role on LinkedIn and had to reach out.\n\n"
+        "Okay, deep breath. 😮‍💨\n\n"
+        "You weren't going to read this. You were going to scroll, sip your coffee, and move on. But here's the thing 😏\n\n"
+        "**This email wasn't written for you by a human. It was sent by a bot I built from scratch.** 🤖\n"
+        "LinkedIn scrapers → Apify → RabbitMQ → SMTP workers → your inbox. 24/7 on my own server. Today, it picked you. Lucky you. 😎\n\n"
+        "I could've copy-pasted a template. Instead, I built the thing that copy-pastes for me.\n"
+        "Most candidates *send* emails. I *ship software*. You just felt the difference.\n\n"
+        "Who am I? A 3+ yr Full Stack Dev. Allergic to boring. Addicted to shipping. No tech I can't learn in 2 weeks, no role I'm too proud to take — FS, frontend, backend, DevOps — just let me build. 🏗️\n\n"
+        "Receipts, all live, all mine:\n"
+        "🏏 **TPL Mania** — Dream11 built from scratch. Fantasy cricket, live scoring, payments → https://tplmania.org\n"
+        "🎮 **TicTacToe Multiplayer** — WebSocket PvP, built in a weekend → https://tictactoe.saitejareddy.online\n"
+        "🤖 **Auto Email Sender** — The bot that just hit your inbox. Open source → https://github.com/mintureddy25/auto_email_sender\n"
+        "🌐 **Portfolio** → https://saitejareddy.online\n\n"
+        "Stack: React · Next · Node · NestJS · PostgreSQL · Mongo · Redis · RabbitMQ · AWS · Docker · Python. Frameworks are furniture — what I bring is the instinct to **ship, break, fix, ship again**. ⚡\n\n"
+        "Give me *any* role where someone owns features idea → prod, and I'll embarrass devs with 2x my XP. Onboard in days. Ship in weeks. 🚀\n\n"
+        "If this made you smirk, hit reply. Worst case: you close the tab. Best case: you find your next builder. 🙌\n\n"
+        "**Sai Teja Reddy**\n"
+        "📍 Hyderabad · ⚡ 3+ yrs · 💼 Immediate joiner\n\n"
+        "P.S. Still here? You just finished a cold email a bot delivered. That's me in production. Imagine what I'd do with your codebase. 😎\n"
+        "P.P.S. Resume attached. She's thorough."
     )
 
     msg.attach(MIMEText(body, "plain"))
