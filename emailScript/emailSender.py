@@ -1,3 +1,4 @@
+import re
 import redis
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -21,7 +22,6 @@ EMAIL_SMTP_SERVER = os.getenv("EMAIL_SMTP_SERVER")
 EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT"))
 PDF_DEFAULT = "./saitejareddyresume.pdf"
 PDF_WITH_METAGEEKS = "./SaiTejaReddyResume.pdf"
-PDF_WITHOUT_METAGEEKS = "./SaiTeja_Reddy_Resume.pdf"
 PDF_JAVA_RESUME = "./Sai_Teja_Reddy_Resume .pdf"
 
 # Create Redis client
@@ -53,29 +53,41 @@ def send_email(email, subject, include_metageeks=False, use_java_resume=False):
     # Email body
     body = (
         "Hi,\n\n"
-        f"I came across the {subject} role on LinkedIn and had to reach out.\n\n"
+        f"I came across the {subject} role on LinkedIn and had to reach out.\n"
         "Okay, deep breath. 😮‍💨\n\n"
-        "You weren't going to read this. You were going to scroll, sip your coffee, and move on. But here's the thing 😏\n\n"
-        "**This email wasn't written for you by a human. It was sent by a bot I built from scratch.** 🤖\n"
-        "LinkedIn scrapers → Apify → RabbitMQ → SMTP workers → your inbox. 24/7 on my own server. Today, it picked you. Lucky you. 😎\n\n"
-        "I could've copy-pasted a template. Instead, I built the thing that copy-pastes for me.\n"
-        "Most candidates *send* emails. I *ship software*. You just felt the difference.\n\n"
-        "Who am I? A 3+ yr Full Stack Dev. Allergic to boring. Addicted to shipping. No tech I can't learn in 2 weeks, no role I'm too proud to take — FS, frontend, backend, DevOps — just let me build. 🏗️\n\n"
+        "Take a sip of coffee. But here's the thing 😏\n\n"
+        "I built a project that scrapes LinkedIn posts and emails, and sends emails automatically. "
+        "**This email was also sent using my project.** 🤖\n\n"
         "Receipts, all live, all mine:\n"
         "🏏 **TPL Mania** — Dream11 built from scratch. Fantasy cricket, live scoring, payments → https://tplmania.org\n"
         "🎮 **TicTacToe Multiplayer** — WebSocket PvP, built in a weekend → https://tictactoe.saitejareddy.online\n"
         "🤖 **Auto Email Sender** — The bot that just hit your inbox. Open source → https://github.com/mintureddy25/auto_email_sender\n"
         "🌐 **Portfolio** → https://saitejareddy.online\n\n"
         "Tech stack? Whatever you're using. I don't marry frameworks — I ship with them, then move on. ⚡\n\n"
-        "Give me *any* role where someone owns features idea → prod, and I'll embarrass devs with 2x my XP. Onboard in days. Ship in weeks. 🚀\n\n"
-        "If this made you smirk, hit reply. Worst case: you close the tab. Best case: you find your next builder. 🙌\n\n"
         "**Sai Teja Reddy**\n"
-        "📍 Hyderabad · ⚡ 3+ yrs · 💼 Immediate joiner\n\n"
-        "P.S. Still here? You just finished a cold email a bot delivered. That's me in production. Imagine what I'd do with your codebase. 😎\n"
-        "P.P.S. Resume attached. She's thorough."
+        "📍 Hyderabad · ⚡ 3+ yrs · 💼 Immediate joiner"
     )
 
-    msg.attach(MIMEText(body, "plain"))
+    # Plain text (strip markdown markers)
+    plain = re.sub(r"\*\*(.+?)\*\*", r"\1", body)
+    plain = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"\1", plain)
+
+    # HTML (render bold, italic, links)
+    html = body.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    html = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html)
+    html = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", html)
+    html = re.sub(r"(https?://[^\s<]+)", r'<a href="\1">\1</a>', html)
+    html = html.replace("\n", "<br>\n")
+    html = (
+        '<div style="font-family:Arial,Helvetica,sans-serif;'
+        'font-size:14px;line-height:1.55;color:#222;">'
+        f"{html}</div>"
+    )
+
+    alt = MIMEMultipart("alternative")
+    alt.attach(MIMEText(plain, "plain", "utf-8"))
+    alt.attach(MIMEText(html, "html", "utf-8"))
+    msg.attach(alt)
 
     # Attach PDF
     if os.path.exists(pdf_file_path):
